@@ -1,6 +1,7 @@
-import {describe, expect, test, afterEach} from "vitest";
-import {render, cleanup} from "@testing-library/react";
+import { describe, expect, test, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
 import App from "./App.jsx";
+import { renderComponent } from "./test/utils.jsx";
 
 describe("App", () => {
   afterEach(() => {
@@ -8,7 +9,7 @@ describe("App", () => {
   });
 
   test("Should initialize with no props without errors", () => {
-    expect(() => { render(<App />) }).not.toThrow();
+    expect(() => { renderComponent(<App />) }).not.toThrow();
   });
 });
 

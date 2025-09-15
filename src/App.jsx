@@ -1,3 +1,5 @@
+import Header from "./components/Header.jsx";
+
 /**
   The root component for the application.
 
@@ -5,7 +7,10 @@
 */
 function App() {
   return (
-    <h1>Hello world!</h1>
+    <>
+      <Header />
+      <h1>Hello world!</h1>
+    </>
   );
 }
 
