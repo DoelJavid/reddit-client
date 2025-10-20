@@ -1,7 +1,7 @@
 import { describe, expect, test, afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { renderComponent } from "../../test/utils.jsx"
+import { renderComponent } from "../../test/utils.jsx";
 import Search from "./Search.jsx";
 
 describe("Search", () => {
