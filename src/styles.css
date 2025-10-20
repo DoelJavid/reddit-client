@@ -87,3 +87,117 @@ header {
 .search-query-entry:hover {
   text-decoration: underline;
 }
+
+/* Subreddit List Styles */
+
+.subreddit-btn-base,
+.subreddit-add-btn,
+.subreddit-add-input {
+  --topic-bg: #0af;
+  --topic-border-color: #fff0;
+  --topic-hover-bg: #4cf;
+
+  display: flex;
+  flex-flow: row nowrap;
+  width: 240px;
+  margin: 2px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-family: inherit;
+  text-align: center;
+  background-color: var(--topic-bg);
+  color: #fff;
+  border: none;
+  box-shadow:
+    0 0 0 2px var(--topic-border-color),
+    0 0 0 3px #0007;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.subreddit-btn-base.selected,
+.subreddit-btn-base:focus-within {
+  --topic-border-color: #fff;
+}
+
+.subreddit-btn-base:has(.subreddit-btn:hover:not(:active)),
+.subreddit-add-btn:hover:not(:active) {
+  background-color: var(--topic-hover-bg)
+}
+
+.subreddit-add-input {
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 0 0 3px #0007;
+  cursor: text;
+}
+
+.subreddit-btn {
+  width: 100%;
+  height: auto;
+  background: none;
+  color: inherit;
+  border: none;
+  outline: none;
+  font-size: inherit;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.subreddit-remove-btn {
+  background: none;
+  border: none;
+  opacity: 80%;
+  cursor: pointer;
+}
+
+.subreddit-remove-btn:hover,
+.subreddit-remove-btn:focus {
+  outline: none;
+  opacity: 100%;
+}
+
+.subreddit-remove-btn:active {
+  opacity: 60%;
+}
+
+.subreddit-remove-btn>img {
+  width: 100%;
+  height: 100%;
+}
+
+.topics-list {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 8px;
+  max-width: 240px;
+}
+
+.topic {
+  --topic-bg: #0af;
+  --topic-hover-bg: #4cf;
+  --topic-active-bg: #08e;
+
+  width: 240px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  text-align: right;
+  background-color: var(--topic-bg);
+  border: 2px solid #fff0;
+  border-radius: 1rem;
+}
+
+.topic:focus {
+  border: 2px solid #fff;
+  outline: 2px solid var(--topic-bg);
+}
+
+.topic:hover {
+  background-color: var(--topic-hover-bg);
+}
+
+.topic:active {
+  background-color: var(--topic-active-bg);
+}
