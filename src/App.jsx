@@ -1,5 +1,6 @@
 import Header from "./components/Header.jsx";
 import Subreddits from "./features/subreddits/Subreddits.jsx";
+import Posts from "./features/posts/Posts.jsx";
 
 /**
   The root component for the application.
@@ -16,6 +17,7 @@ function App() {
         "r/bar",
         "r/baz"
       ]} />
+      <Posts />
     </>
   );
 }
