@@ -1,10 +1,15 @@
 /* Root Styles / Variables */
 
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
 :root {
   --background-color: #fff;
   --text-color: #000;
   --border-color: #999;
   --default-border: 2px solid var(--border-color);
+  --shadow-color: #0007;
+  --accent-color: #4fdc3f;
+  --accent-hover: #3fc02f;
 }
 
 * {
@@ -12,8 +17,16 @@
 }
 
 html {
+  font-family: "Red Hat Display", Arial, sans-serif;
   font-size: 20px;
-  font-family: sans-serif;
+  font-weight: 700;
+}
+
+body {
+  margin: 0;
+  padding: 3rem 0 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* Header Styles */
@@ -21,8 +34,22 @@ html {
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
   width: 100%;
   height: 3rem;
+  padding: 0.5rem;
+  background-color: var(--background-color);
+  box-shadow: 0 0 5px 4px var(--shadow-color);
+}
+
+.logo {
+  margin: .25rem 0;
+  font-size: 1rem;
+  font-weight: 900;
 }
 
 /* Search Bar Styles */
@@ -31,6 +58,7 @@ header {
   position: relative;
   max-width: 300px;
   height: 1.5rem;
+  margin: .25rem 0;
 }
 
 .search-bar {
@@ -90,12 +118,24 @@ header {
 
 /* Subreddit List Styles */
 
+.subreddit-list {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: .5rem;
+  position: fixed;
+  left: 2rem;
+  top: 200px;
+  box-sizing: content-box;
+  max-width: 240px;
+  padding: 1rem;
+  background-color: var(--background-color);
+  box-shadow: 2px 4px 5px var(--shadow-color);
+}
+
 .subreddit-btn-base,
 .subreddit-add-btn,
 .subreddit-add-input {
-  --topic-bg: #0af;
-  --topic-border-color: #fff0;
-  --topic-hover-bg: #4cf;
+  --topic-bg: var(--accent-color);
 
   display: flex;
   flex-flow: row nowrap;
@@ -108,22 +148,28 @@ header {
   text-align: center;
   background-color: var(--topic-bg);
   color: #fff;
-  border: none;
-  box-shadow:
-    0 0 0 2px var(--topic-border-color),
-    0 0 0 3px #0007;
+  border: 4px solid var(--topic-bg);
+  box-shadow: 2px 4px 5px var(--shadow-color);
   border-radius: 1rem;
   cursor: pointer;
 }
 
 .subreddit-btn-base.selected,
 .subreddit-btn-base:focus-within {
-  --topic-border-color: #fff;
+  border: 4px solid #fff;
 }
 
-.subreddit-btn-base:has(.subreddit-btn:hover:not(:active)),
+.subreddit-btn-base:has(.subreddit-btn:hover:not(:active)) {
+  --topic-bg: var(--accent-hover);
+}
+
+.subreddit-add-btn {
+  background-color: #fff;
+  color: #000;
+}
+
 .subreddit-add-btn:hover:not(:active) {
-  background-color: var(--topic-hover-bg)
+  background-color: #eee;
 }
 
 .subreddit-add-input {
@@ -168,43 +214,6 @@ header {
   height: 100%;
 }
 
-.topics-list {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: .5rem;
-  position: absolute;
-  left: .5rem;
-  top: 200px;
-  max-width: 240px;
-}
-
-.topic {
-  --topic-bg: #0af;
-  --topic-hover-bg: #4cf;
-  --topic-active-bg: #08e;
-
-  width: 240px;
-  padding: 4px 8px;
-  font-size: 0.8rem;
-  text-align: right;
-  background-color: var(--topic-bg);
-  border: 2px solid #fff0;
-  border-radius: 1rem;
-}
-
-.topic:focus {
-  border: 2px solid #fff;
-  outline: 2px solid var(--topic-bg);
-}
-
-.topic:hover {
-  background-color: var(--topic-hover-bg);
-}
-
-.topic:active {
-  background-color: var(--topic-active-bg);
-}
-
 /* Post Styles */
 
 .post-list {
@@ -219,8 +228,8 @@ header {
   width: 100%;
   min-width: 240px;
   padding: .5rem;
-  background-color: #fff;
-  color: #000;
+  background-color: var(--background-color);
+  color: var(--text-color);
   border-radius: 8px;
   box-shadow: 2px 4px 5px #0007;
   text-align: center;
@@ -240,6 +249,7 @@ header {
 .post-heading {
   margin: .5rem;
   text-align: left;
+  font-weight: 900;
 }
 
 .post-author {
@@ -271,4 +281,17 @@ header {
 
 .stats-column * {
   margin: 0;
+}
+
+/* Adjust for dark theme. */
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #222;
+    --text-color: #fff;
+  }
+
+  .stats-column img {
+    filter: invert();
+  }
 }

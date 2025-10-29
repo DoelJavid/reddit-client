@@ -24,10 +24,10 @@ function Subreddits() {
   const selectedTopic = useSelector(getSelectedTopic);
 
   return (
-    <div className="topics-list">
+    <div className="subreddit-list">
       {topics && topics.map((topic, idx) =>
         <SubredditButton
-          key={`topic_${idx}_${topic}`}
+          key={`subreddit_${idx}_${topic}`}
           topic={topic}
           selected={topic === selectedTopic}
           onSelectClick={e => {

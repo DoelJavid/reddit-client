@@ -6,7 +6,7 @@ import Search from "../features/search/Search.jsx";
 function Header() {
   return (
     <header>
-      <div>Reddit Minimal</div>
+      <h1 className="logo">reddit stats</h1>
       <Search />
     </header>
   );
