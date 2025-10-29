@@ -6,7 +6,10 @@ import Search from "../features/search/Search.jsx";
 function Header() {
   return (
     <header>
-      <h1 className="logo">reddit stats</h1>
+      <div className="logo">
+        <img src="/icons/logo.svg" alt="" />
+        <h1>reddit stats</h1>
+      </div>
       <Search />
     </header>
   );

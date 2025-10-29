@@ -47,6 +47,13 @@ header {
 }
 
 .logo {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+.logo h1 {
   margin: .25rem 0;
   font-size: 1rem;
   font-weight: 900;
