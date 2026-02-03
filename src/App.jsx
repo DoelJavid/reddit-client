@@ -1,24 +1,18 @@
-import Header from "./components/Header.jsx";
-import Subreddits from "./features/subreddits/Subreddits.jsx";
-import Posts from "./features/posts/Posts.jsx";
+import { Routes, Route } from "react-router";
+import Root from "./Root.jsx";
 
 /**
-  The root component for the application.
+  Contains all routes of the application.
 
   @returns {JSX.element}
 */
 function App() {
   return (
-    <>
-      <Header />
-      <h1>Hello world!</h1>
-      <Subreddits topics={[
-        "r/foo",
-        "r/bar",
-        "r/baz"
-      ]} />
-      <Posts />
-    </>
+    <Routes>
+      <Route index element={<Root />} />
+      <Route path="r/:subreddit" element={<Root />} />
+      <Route path="*" element={<Root notFound />} />
+    </Routes>
   );
 }
 

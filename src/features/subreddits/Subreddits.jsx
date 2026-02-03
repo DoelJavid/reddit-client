@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import SubredditButton from "./SubredditButton.jsx";
 import SubredditAddButton from "./SubredditAddButton.jsx";
 import {
@@ -20,6 +21,7 @@ import {
 function Subreddits() {
   const [addingTopic, setAddingTopic] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const topics = useSelector(getTopics);
   const selectedTopic = useSelector(getSelectedTopic);
 
@@ -32,6 +34,7 @@ function Subreddits() {
           selected={topic === selectedTopic}
           onSelectClick={e => {
             dispatch(selectTopic(topic));
+            navigate(`/${topic}`, { replace: true });
           }}
           onRemoveClick={e => dispatch(removeTopic(topic))}
         />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router";
 import { searchQuery } from "./searchSlice.js";
 import SearchBar from "./SearchBar.jsx";
 import SearchQueryList from "./SearchQueryList.jsx";
@@ -10,9 +11,11 @@ import SearchQueryList from "./SearchQueryList.jsx";
   @returns {JSX.element}
 */
 function Search() {
-  const dispatch = useDispatch();
   const [hasFocus, setHasFocus] = useState(false);
   const [query, setQuery] = useState("");
+  const { subreddit } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   /**
     Event handler to handle search submit.
@@ -21,7 +24,8 @@ function Search() {
   */
   const handleSubmit = (query) => {
     dispatch(searchQuery(query));
-    setQuery("")
+    setQuery("");
+    navigate(`?q=${query}`);
   };
 
   return (

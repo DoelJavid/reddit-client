@@ -68,10 +68,40 @@ const initialState = {
 */
 export const getPosts = (state) => state.posts.content;
 
+// TODO: Make `updatePosts()` a thunk.
+/**
+  For use in a call to the redux `dispatch()` function. Changes the content of
+  the current posts.
+
+  @param {string} query
+  @param {string} subreddit
+  @returns {{
+    type: string,
+    payload: {
+      query: string,
+      subreddit: string
+    }
+  }}
+*/
+export const updatePosts = (query, subreddit = "") => ({
+  type: "updatePosts",
+  payload: {
+    query,
+    subreddit
+  }
+});
+
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {}
+  reducers: {
+    updatePosts: (state, { payload }) => {
+      // Nothing much yet...
+      console.log(
+        `{ query: ${payload.query}, subreddit: ${payload.subreddit} }`
+      );
+    }
+  }
 });
 
 export default postsSlice.reducer;

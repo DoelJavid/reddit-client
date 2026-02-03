@@ -1,14 +1,23 @@
 import Post from "./Post.jsx";
-import { useSelector } from "react-redux";
-import { getPosts } from "./postsSlice.js";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts, updatePosts } from "./postsSlice.js";
 
 /**
   List component containing all Reddit posts to browse.
 
+  @param {Object} props
+  @param {string} query
+  @param {string} subreddit
   @returns {JSX.element}
 */
-function Posts() {
+function Posts({query, subreddit}) {
   const posts = useSelector(getPosts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updatePosts(query, subreddit));
+  }, [query, subreddit]);
 
   return (
     <div className="post-list">

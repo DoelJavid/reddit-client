@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router";
 import { setupStore } from "../store";
 
 /**
@@ -10,6 +11,7 @@ import { setupStore } from "../store";
   @param {Object} props
   @param {Object} props.preloadedState
   @param {Object} props.store
+  @param {string} props.searchQuery
   @param {any[]} props.renderOptions
   @returns {{
     store: Object,
@@ -21,6 +23,7 @@ export function renderComponent(
   {
     preloadedState = {},
     store = setupStore(preloadedState),
+    searchQuery = "/",
     ...renderOptions
   } = {}
 ) {
@@ -31,7 +34,9 @@ export function renderComponent(
   */
   const Wrapper = ({ children }) => (
     <Provider store={store}>
-      {children}
+      <MemoryRouter initialEntries={[searchQuery]}>
+        {children}
+      </MemoryRouter>
     </Provider>
   );
 
