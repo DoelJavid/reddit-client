@@ -46,6 +46,14 @@ export const getPostCache = (state) => state.posts.cache;
 */
 export const getPosts = (state) => state.posts.content;
 
+/**
+  A selector to be used with the redux `useSelector()` hook. Selects the
+  loading status of the posts.
+
+  @returns {Post[]}
+*/
+export const getLoadingStatus = (state) => state.posts.loading;
+
 // TODO: Make `updatePosts()` a thunk.
 /**
   For use in a call to the redux `dispatch()` function. Changes the content of

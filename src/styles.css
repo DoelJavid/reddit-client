@@ -290,6 +290,27 @@ header {
   margin: 0;
 }
 
+/* Loading Spinner */
+
+@keyframes loading-spin {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
+}
+
+.loading-spinner {
+  position: absolute;
+  left: calc(50vw - 75px);
+  top: calc(50vh - 75px);
+  width: 150px;
+  height: 150px;
+  animation: 1s linear infinite loading-spin;
+}
+
 /* Adjust for dark theme. */
 
 @media screen and (prefers-color-scheme: dark) {
@@ -298,7 +319,8 @@ header {
     --text-color: #fff;
   }
 
-  .stats-column img {
+  .stats-column img,
+  .loading-spinner {
     filter: invert();
   }
 }
