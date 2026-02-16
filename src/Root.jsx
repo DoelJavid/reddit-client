@@ -34,7 +34,15 @@ function Root({notFound}) {
   return (
     <>
       <Header />
-      <h1>Hello world!</h1>
+      <h2>{
+        subreddit ?
+        (
+          query ?
+          `Showing Results for "${query}" in r/${subreddit}` :
+          `r/${subreddit}`
+        ) :
+        (query ? `Showing Results for "${query}"` : "Home")
+      }</h2>
       <Subreddits topics={[
         "r/foo",
         "r/bar",
