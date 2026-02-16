@@ -16,7 +16,7 @@ function Posts({query, subreddit}) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(updatePosts(query, subreddit));
+    dispatch(updatePosts({ query, subreddit }));
   }, [query, subreddit]);
 
   return (

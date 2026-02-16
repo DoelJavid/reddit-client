@@ -1,7 +1,7 @@
 import { describe, expect, test, afterEach } from "vitest";
 import { cleanup, screen } from "@testing-library/react";
 import App from "./App.jsx";
-import { renderComponent } from "./test/utils.jsx";
+import { createFetchResponse, renderComponent } from "./test/utils.jsx";
 
 describe("App", () => {
   afterEach(() => {

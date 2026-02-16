@@ -1,7 +1,14 @@
 import { render } from "@testing-library/react";
+import { vi } from "vitest";
 import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router";
 import { setupStore } from "../store";
+import sampleData from "./sample-data"
+
+/**
+  Mock implementation for `fetch()`.
+*/
+global.fetch = vi.fn(() => sampleData);
 
 /**
   A basic wrapper function that wraps the given React component around a
@@ -44,5 +51,9 @@ export function renderComponent(
     store,
     ...render(Component, {wrapper: Wrapper, ...renderOptions})
   };
+}
+
+export function createFetchResponse(data) {
+  return { json: () => new Promise((resolve) => resolve(data)) };
 }
 

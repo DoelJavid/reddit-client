@@ -6,5 +6,15 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true
+  },
+  server: {
+    host: true,
+    proxy: {
+      "/api": {
+        target: "https://api.reddit.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, "")
+      }
+    }
   }
 });

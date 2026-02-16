@@ -1,7 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 /**
   @typedef {{
+    author: string;
+    dateMade: Date;
     postLink: string;
     subreddit: string;
     heading: string;
@@ -20,45 +22,21 @@ import { createSlice } from "@reduxjs/toolkit";
 // https://www.reddit.com/r/${subreddit}/${query}.json?raw_json=1
 
 const initialState = {
-  content: [{
-      postLink: "https://www.reddit.com/r/godot/comments/1o6hv4b/godot_showcase_material_maker/",
-      subreddit: "godot",
-      heading: "Godot Showcase - Material Maker",
-      thumbnail: "https://external-preview.redd.it/HiAakAPJwDeO9KvBFwWhsj-HD1Q3XS0tvxGwlCn450g.jpeg?auto=webp&s=f9528f737547d0801336b02b793fcc8d94dbc272",
-      totalUpvotes: 91,
-      totalDownvotes: 1,
-      totalComments: 9
-    },
-    {
-      postLink: "https://www.reddit.com/r/godot/comments/1obv796/dev_snapshot_godot_46_dev_2/",
-      subreddit: "godot",
-      heading: "Dev snapshot: Godot 4.6 dev 2",
-      thumbnail: "https://external-preview.redd.it/-2_NbNHEDPoqpblabaLTenq3SNKFWn9nxfnQRcBuUGs.jpeg?auto=webp&s=99a5d1ad4ffae123c0c358d19eb372d5c05937cb",
-      totalUpvotes: 205,
-      totalDownvotes: 0,
-      totalComments: 39
-    },
-    {
-      postLink: "https://www.reddit.com/r/godot/r/godot/comments/1ogs85k/i_made_a_google_docs_clone_for_fun/",
-      subreddit: "godot",
-      heading: "I made a google docs clone for fun",
-      thumbnail: "https://preview.redd.it/nv0djtlv2ixf1.png?auto=webp&s=46d052f3b2051b8f8d249083b17734cce0cca749",
-      totalUpvotes: 701,
-      totalDownvotes: 21,
-      totalComments: 30
-    },
-    {
-      postLink: "https://www.reddit.com/r/godot/comments/1ogvce5/unintentional_similarity/",
-      subreddit: "godot",
-      heading: "Unintentional similarity...",
-      thumbnail: "https://external-preview.redd.it/cjdlbXZ2NjRwaXhmMTGVhfLu_NZawlrBkndL1zEcaVj7ByFYO6YXxaweoCgb.png?format=pjpg&auto=webp&s=487c8e7c8bd8d580777dc585fc31cb91588fd4d8",
-      totalUpvotes: 125,
-      totalDownvotes: 2,
-      totalComments: 62
-    }
-  ],
+  loading: true,
+  content: [],
   cache: {}
 };
+
+/**
+  A selector to be used with the redux `useSelector()` hook. Selects the post
+  cache.
+
+  @returns {{
+    dateMade: Date
+    data: Post[];
+  }[]}
+*/
+export const getPostCache = (state) => state.posts.cache;
 
 /**
   A selector to be used with the redux `useSelector()` hook. Selects all
@@ -72,35 +50,86 @@ export const getPosts = (state) => state.posts.content;
 /**
   For use in a call to the redux `dispatch()` function. Changes the content of
   the current posts.
-
-  @param {string} query
-  @param {string} subreddit
-  @returns {{
-    type: string,
-    payload: {
-      query: string,
-      subreddit: string
-    }
-  }}
 */
-export const updatePosts = (query, subreddit = "") => ({
-  type: "updatePosts",
-  payload: {
-    query,
-    subreddit
-  }
-});
+export const updatePosts = createAsyncThunk(
+  "posts/updatePosts", async ({ query, subreddit = "" }, thunkApi) => {
+    const uriEncodedQuery = encodeURIComponent(query);
+    const baseUrl = `${window.location.origin}/api`;
+    const subredditUrl = subreddit && `/r/${subreddit}`;
+    const queryUrl = query ?
+      `/search/.json?q=${uriEncodedQuery}&type=link&raw_json=1` :
+      "\/.json?type=link&raw_json=1";
+
+    const fetchUrl = `${baseUrl}${subredditUrl}${queryUrl}`;
+    const cacheKey = `${query}${subreddit && `@${subreddit}`}`;
+    const postCache = getPostCache(thunkApi.getState());
+
+    // Attempt to grab data from cache.
+    // Note: Date.now() is measured in milliseconds. Therefore, dividing by
+    // 3,600,000 will grant the difference in hours.
+    if (
+      postCache[cacheKey] &&
+      (Date.now() - postCache[cacheKey].dateMade) / 3600000 < 3
+    ) {
+      return {
+        data: postCache[cacheKey].data,
+        cacheKey
+      };
+    }
+
+    // If no entry within the cache exists, attempt to fetch the data from Reddit.
+    try {
+      const postData = await fetch(fetchUrl);
+      const postJson = await postData.json();
+      const parsedData = postJson.data.children.map(({ data }) => {
+        return {
+          author: data.author,
+          dateMade: new Date(data.created),
+          lastEdited: new Date(data.edited),
+          postLink: data.url,
+          subreddit: data.subreddit,
+          heading: data.title,
+          thumbnail: data.preview
+            && data.preview.images
+            && data.preview.images[0].source.url,
+          totalUpvotes: data.ups,
+          totalDownvotes: Math.round(data.ups / data.upvote_ratio),
+          totalComments: data.num_comments
+        };
+      });
+
+      return {
+        data: parsedData,
+        cacheKey
+      };
+    } catch (err) {
+      thunkApi.rejectWithValue(err);
+    };
+  });
 
 export const postsSlice = createSlice({
   name: "posts",
   initialState,
-  reducers: {
-    updatePosts: (state, { payload }) => {
-      // Nothing much yet...
-      console.log(
-        `{ query: ${payload.query}, subreddit: ${payload.subreddit} }`
-      );
-    }
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+    .addCase(updatePosts.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(updatePosts.fulfilled, (state, { payload }) => {
+      if (typeof payload === "object") {
+        state.content = payload.data;
+        state.cache[payload.cacheKey] = {
+          data: payload.data,
+          dateMade: Date.now()
+        };
+      }
+      state.loading = false;
+    })
+    .addCase(updatePosts.rejected, (state, { payload }) => {
+      console.error(payload);
+      state.loading = false;
+    });
   }
 });
 

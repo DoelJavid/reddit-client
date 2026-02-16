@@ -2,7 +2,7 @@ import {describe, expect, test, afterEach} from "vitest";
 import {render, cleanup} from "@testing-library/react";
 import Posts from "./Posts.jsx";
 import Post from "./Post.jsx";
-import { renderComponent } from "../../test/utils.jsx";
+import { createFetchResponse, renderComponent } from "../../test/utils.jsx";
 
 describe("Posts", () => {
   afterEach(() => {
@@ -11,6 +11,48 @@ describe("Posts", () => {
 
   test("Should initialize with no props without errors", () => {
     expect(() => { renderComponent(<Posts />) }).not.toThrow();
+  });
+
+  test("Should fetch to '{root}/api/' if no query or subreddit is given.", () => {
+    renderComponent(<Posts />);
+
+    const firstArg = fetch.mock.lastCall[0];
+
+    expect(fetch).toHaveBeenCalled();
+    expect(firstArg).toMatch(/\/api/);
+  });
+
+  test("Should fetch to '{root}/api/r/:subreddit' if subreddit is defined.", () => {
+    renderComponent(<Posts subreddit="askreddit" />);
+
+    const firstArg = fetch.mock.lastCall[0];
+
+    expect(fetch).toHaveBeenCalled();
+    expect(firstArg).toMatch(/\/api\/r\/askreddit/);
+  });
+
+  test("Should fetch to '{root}/api/?q=' if query is defined.", () => {
+    renderComponent(<Posts query="dogs" />);
+
+    const firstArg = fetch.mock.lastCall[0];
+
+    expect(fetch).toHaveBeenCalled();
+    expect(firstArg).toMatch(/\/api\/.*\?q=dogs/);
+  });
+
+  test("Should fetch to '{root}/api/r/:subreddit/?q=' if both subreddit and query is defined.", () => {
+    renderComponent(<Posts subreddit="askreddit" query="dogs" />);
+
+    const firstArg = fetch.mock.lastCall[0];
+
+    expect(fetch).toHaveBeenCalled();
+    expect(firstArg).toMatch(/\/api\/r\/askreddit\/.*\?q=dogs/);
+  });
+});
+
+describe("Post", () => {
+  test("Should initialize with no props without errors", () => {
+    expect(() => { renderComponent(<Post />) }).not.toThrow();
   });
 
   test("Should contain an element with the class `.post-thumbnail` if the thumbnail is defined.", () => {
@@ -25,8 +67,8 @@ describe("Posts", () => {
   test("Should contain no `.post-thumbnail` if the thumbnail is not defined.", () => {
     const { container } = renderComponent(<Post />);
     const imageTag = container.querySelector(".post-thumbnail");
-    
+
     expect(imageTag).toBeNull();
   });
-});
+})
 
