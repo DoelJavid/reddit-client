@@ -10,6 +10,22 @@ import sampleData from "./sample-data"
 */
 global.fetch = vi.fn(() => sampleData);
 
+// Solution found here:
+// https://github.com/vitest-dev/vitest/issues/821
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: vi.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }))
+});
+
 /**
   A basic wrapper function that wraps the given React component around a
   provider element to allow for testing.
