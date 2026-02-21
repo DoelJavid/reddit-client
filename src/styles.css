@@ -53,7 +53,7 @@ header {
   gap: .5rem;
 }
 
-.logo h1 {
+.logo-text {
   margin: .25rem 0;
   font-size: 1rem;
   font-weight: 900;
@@ -131,17 +131,34 @@ h2 {
 /* Subreddit List Styles */
 
 .subreddit-list {
+  position: fixed;
+  left: 2rem;
+  top: 5rem;
+  z-index: 1;
+  box-sizing: content-box;
+  max-width: 290px;
+  height: calc(100% - 10rem);
+  min-height: 300px;
+  max-height: 454px;
+  background-color: var(--background-color);
+  box-shadow: 2px 4px 5px var(--shadow-color);
+  text-align: center;
+}
+
+.subreddit-list-content {
   display: flex;
   flex-flow: column nowrap;
   gap: .5rem;
-  position: fixed;
-  left: 2rem;
-  top: 200px;
-  box-sizing: content-box;
-  max-width: 240px;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   padding: 1rem;
-  background-color: var(--background-color);
-  box-shadow: 2px 4px 5px var(--shadow-color);
+  overflow-y: scroll;
+}
+
+.subreddit-list-collapse {
+  display: none;
+  cursor: pointer;
 }
 
 .subreddit-btn-base,
@@ -314,6 +331,62 @@ h2 {
   width: 150px;
   height: 150px;
   animation: 1s linear infinite loading-spin;
+}
+
+/* Adjust for smaller screens */
+
+@media (max-width: 1380px) {
+
+  /* FRICK YOU LIQUID GLASS!!!!1!1!!! THIS LITERALLY CAN'T BE FIXED ON IOS! */
+  .subreddit-list {
+    align-items: center;
+    left: 0;
+    top: 3rem;
+    width: 100%;
+    max-width: 100vw;
+    height: 100lvh;
+    min-height: 0;
+    max-height: 100lvh;
+  }
+
+  .subreddit-list.collapsed {
+    left: -100%;
+  }
+
+  /* For some strange reason this selector is required... */
+  .subreddit-list-content {
+    height: calc(100lvh - 6rem);
+  }
+
+  .subreddit-list-collapse {
+    display: block;
+    position: relative;
+    left: 0%;
+    top: 0;
+    z-index: -1;
+    width: 3rem;
+    height: 3rem;
+    border: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    box-shadow: 2px 4px 5px var(--shadow-color);
+  }
+
+  .subreddit-list.collapsed .subreddit-list-collapse {
+    left: 100%;
+  }
+
+  .subreddit-btn-base {
+    width: calc(100% - 3rem);
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 720px) {
+  .logo-text {
+    display: none;
+  }
 }
 
 /* Adjust for dark theme. */

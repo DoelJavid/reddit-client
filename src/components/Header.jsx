@@ -7,8 +7,8 @@ function Header() {
   return (
     <header>
       <div className="logo">
-        <img src="/icons/logo.svg" alt="" />
-        <h1>reddit stats</h1>
+        <img src="/icons/logo.svg" alt="Reddit Stats" />
+        <p className="logo-text" aria-hidden="true">reddit stats</p>
       </div>
       <Search />
     </header>
